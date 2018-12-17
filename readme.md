@@ -1,9 +1,13 @@
 # XorShift256
 A standalone lightweight library provide a seedable random number generator with a period of 2^256 in JavaScript.
 
+*Read this in other languages: [English](README.md), [简体中文](README.zh-cn.md).*
+
 ### Usage
 
     npm install xorshift256
+
+If used in browsers that don't support es6, transpire is not need but polyfill is required.
 
 Node.js
 
