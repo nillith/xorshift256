@@ -7,7 +7,7 @@ A standalone lightweight library that provide a seedable random number generator
 
     npm install xorshift256
 
-If used in browsers that don't support es6, transpire is not needed but polyfill is required.
+If used in browsers that don't support es6, transpile is not needed but polyfill is required.
 
 Node.js
 
