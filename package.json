@@ -1,17 +1,17 @@
 {
   "name": "xorshift256",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/cjs.js",
   "module": "dist/es.js",
   "browser": "dist/iife.js",
+  "types": "dist/index.d.ts",
   "files": [
     "/dist"
   ],
   "scripts": {
     "build": "npx rollup -c",
     "dev": "rollup -c -w",
-    "test": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' nyc mocha",
-    "pretest": "npm run build"
+    "test:unit": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' nyc mocha --opts mocha.opts"
   },
   "author": "",
   "license": "MIT",
