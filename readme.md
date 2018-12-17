@@ -1,5 +1,5 @@
 # XorShift256
-A standalone lightweight library provide a seedable random number generator with a period of 2^256 in JavaScript.
+A standalone lightweight library that provide a seedable random number generator with a period of 2^256 in JavaScript.
 
 *Read this in other languages: [English](README.md), [简体中文](README.zh-cn.md).*
 
@@ -7,7 +7,7 @@ A standalone lightweight library provide a seedable random number generator with
 
     npm install xorshift256
 
-If used in browsers that don't support es6, transpire is not need but polyfill is required.
+If used in browsers that don't support es6, transpire is not needed but polyfill is required.
 
 Node.js
 
@@ -39,7 +39,7 @@ To generate a 32bit integer:
 
     rng.nextInt32();
 
-To discard certain number result:
+To discard certain number of results:
 
     rng.discard(100);
 
@@ -47,9 +47,9 @@ To make a deep copy of the generator:
 
     const clone = rng.clone();
 
-To check if two generator is equal (that is they will generate the same sequence):
+To check if two generator is equal (that is they will generate the identical sequence):
 
-    clone.equal(rng)
+    clone.equals(rng)
 
 To save the internal state of the generator:
 

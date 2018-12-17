@@ -15,7 +15,7 @@ Node.js
 
     const rng = XorShift256(Math.random());
 
-构造函数有一个可选的种子参数。可以传入任何值，推荐传入数值数组。如果不提供种子，则使用`XorShift256.defaultSeed`作为种子.
+构造函数有一个可选的种子参数。可以传入任何值，推荐传入数值数组。如果不提供种子，则会使用`XorShift256.defaultSeed`作为种子.
 
 你也可以在构造完成后重新设置种子:
 
@@ -24,7 +24,7 @@ Node.js
 生成 (0, 1) 之间的浮点数:
 
     rng();
-    // or:
+    // 或者
     rng.next01();
 
 生成 (-1, 1) 之间的浮点数:
@@ -49,7 +49,7 @@ Node.js
 
 确定发生器是否相同
 
-    clone.equal(rng)
+    clone.equals(rng)
 
 保存发生器的状态:
 
