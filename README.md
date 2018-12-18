@@ -54,7 +54,7 @@ To generate a integer value in [min, max):
 
     rng.nextIntRange(min, max);
     // or:
-    const generate = rng.createRealRangeGenerator(min, max);
+    const generate = rng.createIntRangeGenerator(min, max);
     generate();
 
 To discard certain number of results:

@@ -50,7 +50,7 @@ Node.js
 
     rng.nextIntRange(min, max);
     // or:
-    const generate = rng.createRealRangeGenerator(min, max);
+    const generate = rng.createIntRangeGenerator(min, max);
     generate();
 
 跳过指定数量的值:
