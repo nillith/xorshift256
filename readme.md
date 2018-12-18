@@ -1,5 +1,9 @@
+[![Build Status](https://travis-ci.org/nillith/xorshift256.svg?branch=master)](https://travis-ci.org/nillith/xorshift256)
+[![Coverage Status](https://coveralls.io/repos/github/nillith/xorshift256/badge.svg?branch=master)](https://coveralls.io/github/nillith/xorshift256?branch=master)
+[![npm version](https://badge.fury.io/js/xorshift256.svg)](https://badge.fury.io/js/xorshift256)
+
 # XorShift256
-A standalone lightweight library that provide a seedable random number generator with a period of 2^256 in JavaScript.
+A tiny standalone library that provide a seedable random number generator with a period of 2^256 in JavaScript.
 
 *Read this in other languages: [English](README.md), [简体中文](README.zh-cn.md).*
 
@@ -15,7 +19,7 @@ Node.js
 
     const rng = XorShift256(Math.random());
 
-The constructor accept an optional seed parameter. You can pass anything as seed. It's recommended to pass an array of numbers. If you don't provide one. It will seed with a fixed default seed:  `XorShift256.defaultSeed`.
+The parameter of the constructor will be used to seed the generator. It's optional. If you don't provide one. It will seed with a fixed default seed:  `XorShift256.defaultSeed`. You can pass anything as seed. It's recommended to pass an array of numbers.
 
 You can also reseed the generator anytime after creation:
 
