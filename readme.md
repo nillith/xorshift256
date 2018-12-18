@@ -51,7 +51,7 @@ To make a deep copy of the generator:
 
     const clone = rng.clone();
 
-To check if two generator is equal (that is they will generate the identical sequence):
+To check if two generators are equal (that is they will generate identical sequence):
 
     clone.equals(rng)
 
@@ -61,7 +61,7 @@ To save the internal state of the generator:
 
 To restore the internal state of the generator:
 
-    rng.deserialize(data);
+    rng.deserialize(data); // return true if succeeded. return false and keep internal state intact if data is not valid.
     // or:
     const rng2 = XorShift256.deserialize(data);
 
