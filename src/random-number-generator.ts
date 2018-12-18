@@ -1,4 +1,4 @@
-import {ReciprocalInt32, ReciprocalUint32, SeedType, toInt32} from "./helpers";
+import {discard, ReciprocalInt32, ReciprocalUint32, SeedType, toInt32} from "./helpers";
 
 
 export interface RandomEngine {
@@ -6,7 +6,7 @@ export interface RandomEngine {
 
   nextUint32(): number;
 
-  discard(count: number): void;
+  step(): void;
 
   serialize(): string;
 
@@ -15,6 +15,9 @@ export interface RandomEngine {
   clone(): this;
 }
 
+export type NumberGenerator = {
+  (): number
+};
 
 export interface RandomNumberGenerator extends RandomEngine {
   (): number;
@@ -26,7 +29,37 @@ export interface RandomNumberGenerator extends RandomEngine {
   next11(): number;
 
   equals(rhs: RandomNumberGenerator | null): boolean;
+
+  discard(count: number): void;
+
+  nextIntRange(min: number, max?: number): number;
+
+  nextRealRange(min: number, max?: number): number;
+
+  createIntRangeGenerator(min: number, max?: number): NumberGenerator;
+
+  createRealRangeGenerator(min: number, max?: number): NumberGenerator;
 }
+
+const normalizeMinMax = function (min: number, max?: number): [number, number] {
+  if (null == max) {
+    max = min;
+    min = 0;
+  }
+  return max > min ? [min, max] : [max, min];
+};
+
+const getIntSpanMin = function (min: number, max?: number): [number, number] {
+  [min, max] = normalizeMinMax(min, max);
+  min = Math.floor(min);
+  const span = Math.floor(max - min);
+  return [span, min];
+};
+
+const getRealSpanMin = function (min: number, max?: number): [number, number] {
+  [min, max] = normalizeMinMax(min, max);
+  return [max - min, min];
+};
 
 const RNGMixIn = {
   nextInt32(this: RandomNumberGenerator): number {
@@ -37,7 +70,36 @@ const RNGMixIn = {
   },
   next11(this: RandomNumberGenerator): number {
     return this.nextInt32() * ReciprocalInt32;
-  }
+  },
+  nextIntRange(this: RandomNumberGenerator, min: number, max?: number): number {
+    let span: number;
+    [span, min] = getIntSpanMin(min, max);
+    return Math.floor(this.next01() * span) + min;
+  },
+
+  nextRealRange(this: RandomNumberGenerator, min: number, max?: number): number {
+    let span: number;
+    [span, min] = getRealSpanMin(min, max);
+    return this.next01() * span + min;
+  },
+
+  createIntRangeGenerator(this: RandomNumberGenerator, min: number, max?: number): NumberGenerator {
+    const self = this;
+    let span: number;
+    [span, min] = getIntSpanMin(min, max);
+    return function () {
+      return Math.floor(self.next01() * span) + min;
+    };
+  },
+
+  createRealRangeGenerator(this: RandomNumberGenerator, min: number, max?: number): NumberGenerator {
+    const self = this;
+    let span: number;
+    [span, min] = getRealSpanMin(min, max);
+    return function () {
+      return self.next01() * span + min;
+    };
+  },
 };
 
 const emptyName = function (anonymousFunction: Function): Function {
@@ -56,7 +118,7 @@ export const engineToRNG = function (rngEngine: RandomEngine, Constructor: Funct
       rngEngine.seed(seed);
     },
     discard(count: number) {
-      rngEngine.discard(count);
+      discard(rngEngine, count);
     },
     clone() {
       return engineToRNG(rngEngine.clone(), Constructor);
@@ -109,6 +171,7 @@ export const createRandomNumberGeneratorClass = function <T extends RandomEngine
       }
       return null;
     },
+    createRNGClass: createRandomNumberGeneratorClass
   };
 
   return Object.assign(RNGClass, namedMethods) as RandomNumberGeneratorClass<RandomNumberGenerator>;

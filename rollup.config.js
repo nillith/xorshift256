@@ -17,7 +17,10 @@ const createOutput = function (file, extra) {
 
 // workaround for terser
 
-const terserReserved = ['XorShift256', 'exports', 'seed', 'nextUint32', 'discard', 'serialize', 'deserialize', 'clone', 'next01', 'nextInt32', 'next11', 'equals']
+const terserReserved = ['XorShift256', 'createRNGClass', 'exports',
+  'seed', 'nextUint32', 'discard', 'serialize', 'deserialize', 'clone',
+  'nextIntRange', 'nextRealRange', 'createIntRangeGenerator', 'createRealRangeGenerator',
+  'next01', 'nextInt32', 'next11', 'equals']
 const createConfig = function (output) {
   return {
     input: 'src/index.ts',
@@ -31,8 +34,9 @@ const createConfig = function (output) {
           toplevel: true,
           reserved: terserReserved,
           properties: {
-            reserved: terserReserved
-          }
+            reserved: terserReserved,
+            debug: false,
+          },
         },
       })
     ],

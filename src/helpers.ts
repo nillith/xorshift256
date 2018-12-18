@@ -6,6 +6,13 @@ export const toInt32 = function (n: number): number {
   return n << 0;
 };
 
+export const discard = function (target: any, count: number) {
+  count = toUint32(count);
+  while (count-- > 0) {
+    target.step();
+  }
+};
+
 export const Phi32 = 2654435769;
 
 export const ReciprocalUint32 = 1 / (toUint32(-1) + 1);

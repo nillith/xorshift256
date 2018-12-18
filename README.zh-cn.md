@@ -31,6 +31,13 @@ Node.js
 
     rng.next11();
 
+生成 [min, max) 之间的浮点数:
+
+    rng.nextRealRange(min, max);
+    // or:
+    const generate = rng.createRealRangeGenerator(min, max);
+    generate();
+
 生成32位无符型整数:
 
     rng.nextUint32();
@@ -39,7 +46,13 @@ Node.js
 
     rng.nextInt32();
 
-舍弃指定数量的值:
+生成 [min, max) 之间的整数:
+    rng.nextIntRange(min, max);
+    // or:
+    const generate = rng.createRealRangeGenerator(min, max);
+    generate();
+
+跳过指定数量的值:
 
     rng.discard(100);
 

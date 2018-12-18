@@ -1,4 +1,4 @@
-import {Phi32, seedToArray, SeedType, toUint32} from "./helpers";
+import {discard, Phi32, seedToArray, SeedType, toUint32} from "./helpers";
 import {RandomEngine} from "./random-number-generator";
 
 const Mask = 0x7;
@@ -31,7 +31,7 @@ const isValidIndex = function (index: number): boolean {
 };
 
 const isValidRNGStates = function (currentIndex: number, states: StateType): boolean {
-  if (!isValidIndex(currentIndex) || R !== states.length) {
+  if (!isValidIndex(currentIndex) || R > states.length) {
     return false;
   }
 
@@ -78,14 +78,6 @@ export class XorShift256Engine implements RandomEngine {
     return result as this;
   }
 
-
-  discard(count: number): void {
-    count = toUint32(count);
-    while (count-- > 0) {
-      this.step();
-    }
-  }
-
   nextUint32(): number {
     const self = this;
     const {currentIndex} = self;
@@ -112,16 +104,9 @@ export class XorShift256Engine implements RandomEngine {
         s = toUint32((s + j) * Phi32 + c);
         states[j] ^= s;
       }
-      self.discard(SeedingDiscardCount + i);
+      discard(self, SeedingDiscardCount + i);
     }
     self.currentIndex = 0;
-    if (!isValidRNGStates(self.currentIndex, states)) {
-      states[0] = Phi32;
-      self.discard(SeedingDiscardCount * R);
-      while (0 !== self.currentIndex) {// should not get here, just for future proofing
-        self.step();
-      }
-    }
   }
 
   serialize(): string {

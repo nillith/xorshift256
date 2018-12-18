@@ -35,6 +35,13 @@ To generate a floating point value in (-1, 1):
 
     rng.next11();
 
+To generate a floating point value in [min, max):
+
+    rng.nextRealRange(min, max);
+    // or:
+    const generate = rng.createRealRangeGenerator(min, max);
+    generate();
+
 To generate a 32bit unsigned integer:
 
     rng.nextUint32();
@@ -42,6 +49,12 @@ To generate a 32bit unsigned integer:
 To generate a 32bit integer:
 
     rng.nextInt32();
+
+To generate a integer value in [min, max):
+    rng.nextIntRange(min, max);
+    // or:
+    const generate = rng.createRealRangeGenerator(min, max);
+    generate();
 
 To discard certain number of results:
 

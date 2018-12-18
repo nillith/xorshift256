@@ -229,7 +229,7 @@ describe('XorShift256', () => {
     assert.equal(data, rng.serialize());
   });
 
-  const invalidDeserializationDatas = ['', null, undefined, {}, [], 'blah'];
+  const invalidDeserializationDatas = ['', null, undefined, {}, [], 'blah', '0,0,0', '0,0,0,0,0,0,0,0,0'];
   it('should keep internal state valid if the data for deserialization is not valid', () => {
     const rng = XorShift256();
     const snapshot = rng.serialize();
@@ -333,7 +333,7 @@ describe('XorShift256', () => {
     }, 0, 1, !!'includeLowerBound');
   });
 
-  it('should return floating point  value in range (-1, 1)', () => {
+  it('should return floating point value in range (-1, 1)', () => {
     const rng = XorShift256();
     rangeTest(function () {
       return rng.next11();
@@ -352,6 +352,132 @@ describe('XorShift256', () => {
     rangeTest(function () {
       return rng.nextUint32();
     }, 0, 4294967296);
+  });
+
+  it('should return integer value in range [min, max)', () => {
+    const rng = XorShift256();
+    const min = 1, max = 10;
+    rangeTest(function () {
+      return rng.nextIntRange(min, max);
+    }, min, max, !!'includeLowerBound');
+
+    rangeTest(function () {
+      return rng.nextIntRange(max);
+    }, 0, max, !!'includeLowerBound');
+  });
+
+  const intRangeSamples = [
+    {
+      min: 1,
+      max: 10,
+    },
+    {
+      min: -20,
+      max: 10,
+    },
+    {
+      min: 100,
+      max: 200,
+    },
+    {
+      min: -21,
+      max: -5,
+    },
+  ];
+  it('should return integer value in range [min, max)', () => {
+    const rng = XorShift256();
+    for (let {min, max} of intRangeSamples) {
+      let generator = rng.createIntRangeGenerator(min, max);
+      rangeTest(function () {
+        return generator();
+      }, min, max, !!'includeLowerBound');
+
+      generator = rng.createIntRangeGenerator(max);
+      rangeTest(function () {
+        return generator();
+      }, max > 0 ? 0 : max, max > 0 ? max : 0, !!'includeLowerBound');
+    }
+
+  });
+
+  it('should return floating point in range [min, max)', () => {
+    const rng = XorShift256();
+    const samples = [
+      {
+        min: 1.5,
+        max: 10.2,
+      },
+      {
+        min: -20.3,
+        max: 10.2,
+      },
+      {
+        min: 100.7,
+        max: 200.8979,
+      },
+      {
+        min: -21.2342,
+        max: -5.256433,
+      },
+    ];
+    for (let {min, max} of samples) {
+      rangeTest(function () {
+        return rng.nextRealRange(min, max);
+      }, min, max, !!'includeLowerBound');
+
+      rangeTest(function () {
+        return rng.nextRealRange(max);
+      }, max > 0 ? 0 : max, max > 0 ? max : 0, !!'includeLowerBound');
+    }
+  });
+
+  it('should generate lower bound', () => {
+    const rng = XorShift256();
+    let minGenerated = false;
+    let maxGenerated = false;
+    for (let {min, max} of intRangeSamples) {
+      let c = 10000;
+      let r;
+      while (c--) {
+        r = rng.nextIntRange(min, max);
+        if (r === min) {
+          minGenerated = true;
+        } else if (r === max) {
+          maxGenerated = true;
+        }
+      }
+      assert.isTrue(minGenerated);
+      assert.isFalse(maxGenerated);
+      minGenerated = false;
+
+      const generator = rng.createIntRangeGenerator(min, max);
+      c = 10000;
+      while (c--) {
+        r = generator();
+        if (r === min) {
+          minGenerated = true;
+        } else if (r === max) {
+          maxGenerated = true;
+        }
+      }
+
+      assert.isTrue(minGenerated);
+      assert.isFalse(maxGenerated);
+    }
+  });
+
+  it('should return floating point value in range [min, max)', () => {
+    const rng = XorShift256();
+    let min = 1.1, max = 10.5;
+    let generator = rng.createRealRangeGenerator(min, max);
+    rangeTest(function () {
+      return generator();
+    }, min, max, !!'includeLowerBound');
+
+    generator = rng.createRealRangeGenerator(max);
+    rangeTest(function () {
+      return generator();
+    }, 0, max, !!'includeLowerBound');
   });
 
   it('class tag test', () => {
