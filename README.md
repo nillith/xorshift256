@@ -51,6 +51,7 @@ To generate a 32bit integer:
     rng.nextInt32();
 
 To generate a integer value in [min, max):
+
     rng.nextIntRange(min, max);
     // or:
     const generate = rng.createRealRangeGenerator(min, max);

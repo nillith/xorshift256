@@ -47,6 +47,7 @@ Node.js
     rng.nextInt32();
 
 生成 [min, max) 之间的整数:
+
     rng.nextIntRange(min, max);
     // or:
     const generate = rng.createRealRangeGenerator(min, max);
