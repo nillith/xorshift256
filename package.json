@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "build": "npx rollup -c",
-    "test:unit": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' nyc mocha --opts mocha.opts",
+    "test:unit": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} nyc mocha --opts mocha.opts",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "author": "",
