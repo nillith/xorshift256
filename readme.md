@@ -7,7 +7,7 @@ A standalone lightweight library that provide a seedable random number generator
 
     npm install xorshift256
 
-If used in browsers that don't support es6, transpile is not needed but polyfill is required.
+If used in browsers that don't support es6, transpilation is not needed but polyfill is required.
 
 Node.js
 
@@ -21,13 +21,13 @@ You can also reseed the generator anytime after creation:
 
     rng.seed(some-seed);
 
-To generate a floating point value between (0, 1):
+To generate a floating point value in [0, 1):
 
     rng();
     // or:
     rng.next01();
 
-To generate a floating point value between (-1, 1):
+To generate a floating point value in (-1, 1):
 
     rng.next11();
 

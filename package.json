@@ -1,17 +1,18 @@
 {
   "name": "xorshift256",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "dist/cjs.js",
   "module": "dist/es.js",
   "browser": "dist/iife.js",
   "types": "dist/index.d.ts",
   "files": [
-    "/dist"
+    "/dist",
+    "/src"
   ],
   "scripts": {
     "build": "npx rollup -c",
-    "dev": "rollup -c -w",
-    "test:unit": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' nyc mocha --opts mocha.opts"
+    "test:unit": "cross-env TS_NODE_COMPILER_OPTIONS='{\\\"module\\\":\\\"commonjs\\\"}' nyc mocha --opts mocha.opts",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "author": "",
   "license": "MIT",
@@ -21,6 +22,7 @@
     "@types/mocha": "^5.2.5",
     "babel-cli": "^6.26.0",
     "chai": "^4.2.0",
+    "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",
