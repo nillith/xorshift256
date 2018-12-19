@@ -5,32 +5,36 @@ const Mask = 0x7;
 const R = Mask + 1;
 const SeedingDiscardCount = 233;
 
+// make sure SeedingMultiplier * (2^32 - 1) + SeedingIncrement is not greater than Number.MAX_SAFE_INTEGER
+const SeedingIncrement = 2531011;
+const SeedingMultiplier = 214013;
+
 type StateType = Uint32Array | number[];
 
-const xorShiftLeft = function (v: number, s: number) {
+const xorShiftLeft = function(v: number, s: number) {
   return toUint32(v ^ (v << s));
 };
 
-const xorShiftRight = function (v: number, s: number) {
+const xorShiftRight = function(v: number, s: number) {
   return toUint32(v ^ (v >>> s));
 };
 
-const advanceIndex = function (idx: number, distance: number) {
+const advanceIndex = function(idx: number, distance: number) {
   return toUint32(idx + distance) & Mask;
 };
 
-const createStates = function (): StateType {
+const createStates = function(): StateType {
   try {
     return new Uint32Array(R);
   } catch (e) {
     return new Array(R);
   }
 };
-const isValidIndex = function (index: number): boolean {
+const isValidIndex = function(index: number): boolean {
   return index >= 0 && index < R;
 };
 
-const isValidRNGStates = function (currentIndex: number, states: StateType): boolean {
+const isValidRNGStates = function(currentIndex: number, states: StateType): boolean {
   if (!isValidIndex(currentIndex) || R > states.length) {
     return false;
   }
@@ -44,7 +48,6 @@ const isValidRNGStates = function (currentIndex: number, states: StateType): boo
   }
   return false;
 };
-
 
 const SerializeDelimiter: string = ',';
 
@@ -78,7 +81,7 @@ export class XorShift256Engine implements RandomEngine {
     return result as this;
   }
 
-  nextUint32(): number {
+  uint32(): number {
     const self = this;
     const {currentIndex} = self;
     self.step();
@@ -96,13 +99,15 @@ export class XorShift256Engine implements RandomEngine {
       states[i] = 0;
     }
 
-    let s, c = 0;
+    let s = 0;
     for (let i = 0; i < seedArray.length; ++i) {
-      s = seedArray[i];
-      c += Phi32;
+      s ^= toUint32((seedArray[i] + i) * Phi32);
       for (let j = 0; j < R; ++j) {
-        s = toUint32((s + j) * Phi32 + c);
+        s = toUint32(s * SeedingMultiplier + SeedingIncrement);
         states[j] ^= s;
+        if (0 === states[j]) {
+          states[j] = toUint32((i * R + j + 1) * Phi32);
+        }
       }
       discard(self, SeedingDiscardCount + i);
     }
@@ -139,5 +144,4 @@ export class XorShift256Engine implements RandomEngine {
     }
     return false;
   }
-
 }

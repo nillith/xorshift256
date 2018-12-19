@@ -1,6 +1,6 @@
 {
   "name": "xorshift256",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "main": "dist/cjs.js",
   "module": "dist/es.js",
   "browser": "dist/iife.js",
@@ -12,7 +12,7 @@
   "scripts": {
     "build": "npx rollup -c",
     "prepublish": "npm run build",
-    "test:unit": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\"} nyc mocha --opts mocha.opts",
+    "test:unit": "cross-env TS_NODE_COMPILER_OPTIONS={\\\"module\\\":\\\"commonjs\\\",\\\"downlevelIteration\\\":true} nyc mocha --opts mocha.opts",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "author": "",
@@ -29,6 +29,7 @@
     "nyc": "^13.1.0",
     "rollup": "^0.68.0",
     "rollup-plugin-terser": "^3.0.0",
+    "rollup-plugin-tslint": "^0.1.38",
     "rollup-plugin-typescript2": "^0.18.1",
     "source-map-support": "^0.5.9",
     "ts-node": "^7.0.1",

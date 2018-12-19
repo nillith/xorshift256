@@ -1,5 +1,6 @@
 import pkg from './package.json'
 import typescript from 'rollup-plugin-typescript2'
+import tslint from "rollup-plugin-tslint";
 import { terser } from 'rollup-plugin-terser'
 
 const toFormat = function (fileName) {
@@ -18,14 +19,15 @@ const createOutput = function (file, extra) {
 // workaround for terser
 
 const terserReserved = ['XorShift256', 'createRNGClass', 'exports',
-  'seed', 'nextUint32', 'discard', 'serialize', 'deserialize', 'clone',
-  'nextIntRange', 'nextRealRange', 'createIntRangeGenerator', 'createRealRangeGenerator',
-  'next01', 'nextInt32', 'next11', 'equals']
+  'seed', 'uint32', 'discard', 'serialize', 'deserialize', 'clone',
+  'uniformInt', 'uniform', 'uniformIntGenerator', 'uniformGenerator',
+  'uniform01', 'int32', 'uniform11', 'equals', 'byte', 'bytes', 'shuffle']
 const createConfig = function (output) {
   return {
     input: 'src/index.ts',
     external: ['ms'],
     plugins: [
+      tslint({}),
       typescript({
         tsconfig: 'tsconfig.json'
       }),

@@ -29,33 +29,48 @@ To generate a floating point value in [0, 1):
 
     rng();
     // or:
-    rng.next01();
+    rng.uniform01();
 
 To generate a floating point value in (-1, 1):
 
-    rng.next11();
+    rng.uniform11();
 
 To generate a floating point value in [min, max):
 
-    rng.nextRealRange(min, max);
+    rng.uniform(min, max);
     // or:
-    const generate = rng.createRealRangeGenerator(min, max);
+    const generate = rng.uniformGenerator(min, max);
     generate();
 
 To generate a 32bit unsigned integer:
 
-    rng.nextUint32();
+    rng.uint32();
 
 To generate a 32bit integer:
 
-    rng.nextInt32();
+    rng.int32();
 
-To generate a integer value in [min, max):
+To generate an integer value in [min, max):
 
-    rng.nextIntRange(min, max);
+    rng.uniformInt(min, max);
     // or:
-    const generate = rng.createIntRangeGenerator(min, max);
+    const generate = rng.uniformIntGenerator(min, max);
     generate();
+
+To generate an integer value in [0, 255]:
+
+   rng.byte();
+
+To generate an array of bytes:
+
+   rng.bytes(length);
+   // or
+   const arr = new Array(length);
+   rng.bytes(arr);
+
+To shuffle an array:
+
+   rng.shuffle(array);
 
 To discard certain number of results:
 

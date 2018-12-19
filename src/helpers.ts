@@ -1,12 +1,12 @@
-export const toUint32 = function (n: number): number {
+export const toUint32 = function(n: number): number {
   return n >>> 0;
 };
 
-export const toInt32 = function (n: number): number {
+export const toInt32 = function(n: number): number {
   return n << 0;
 };
 
-export const discard = function (target: any, count: number) {
+export const discard = function(target: any, count: number) {
   count = toUint32(count);
   while (count-- > 0) {
     target.step();
@@ -21,7 +21,7 @@ export type SeedType = any;
 
 const defaultDefaultSeed: number[] = [99991];
 
-const toNumberArray = function (seed: string): number[] {
+const toNumberArray = function(seed: string): number[] {
   const result: number[] = [];
 
   for (let i = 0; i < seed.length; ++i) {
@@ -30,24 +30,24 @@ const toNumberArray = function (seed: string): number[] {
   return result;
 };
 
-const toNumber = function (v: any) {
+const toNumber = function(v: any) {
   if (typeof v === 'number') {
     return v;
   }
   v = v.toString();
-  let number = parseFloat(v);
-  if (isNaN(number)) {
-    number = 0;
+  let n = parseFloat(v);
+  if (isNaN(n)) {
+    n = 0;
     for (let i = 0; i < v.length; ++i) {
-      number += v.charCodeAt(i);
+      n += v.charCodeAt(i);
     }
-    return number;
+    return n;
   } else {
-    return number;
+    return n;
   }
 };
 
-export const seedToArray = function (seed: SeedType, defaultSeed?: number[]): number[] {
+export const seedToArray = function(seed: SeedType, defaultSeed?: number[]): number[] {
   if (undefined === defaultSeed || null === defaultSeed) {
     defaultSeed = defaultDefaultSeed;
   }

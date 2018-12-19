@@ -25,33 +25,48 @@ Node.js
 
     rng();
     // 或者
-    rng.next01();
+    rng.uniform01();
 
 生成 (-1, 1) 之间的浮点数:
 
-    rng.next11();
+    rng.uniform11();
 
 生成 [min, max) 之间的浮点数:
 
-    rng.nextRealRange(min, max);
+    rng.uniform(min, max);
     // or:
-    const generate = rng.createRealRangeGenerator(min, max);
+    const generate = rng.uniformGenerator(min, max);
     generate();
 
 生成32位无符型整数:
 
-    rng.nextUint32();
+    rng.uint32();
 
 生成32位整数:
 
-    rng.nextInt32();
+    rng.int32();
 
 生成 [min, max) 之间的整数:
 
-    rng.nextIntRange(min, max);
-    // or:
-    const generate = rng.createIntRangeGenerator(min, max);
+    rng.uniformInt(min, max);
+    // 或者
+    const generate = rng.uniformIntGenerator(min, max);
     generate();
+
+生成 [0, 255] 之间的整数:
+
+   rng.byte();
+
+生成一组随机字节:
+
+   rng.bytes(length);
+   // 或者
+   const arr = new Array(length);
+   rng.bytes(arr);
+
+洗牌:
+
+   rng.shuffle(array);
 
 跳过指定数量的值:
 

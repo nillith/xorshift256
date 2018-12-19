@@ -2,7 +2,7 @@ import {seedToArray, toInt32, toUint32} from "./helpers";
 import {assert} from 'chai';
 import 'mocha';
 
-const assertIsArrayOfNumbers = function (arr: any) {
+const assertIsArrayOfNumbers = function(arr: any) {
   assert.isTrue(Array.isArray(arr));
   assert.isAbove(arr.length, 0);
   arr.forEach((e: any) => {
@@ -44,7 +44,7 @@ describe('Helpers Test', () => {
     assertIsArrayOfNumbers(seedToArray(['hello', 'world']));
     assertIsArrayOfNumbers(seedToArray([]));
     assertIsArrayOfNumbers(seedToArray({}));
-    assertIsArrayOfNumbers(seedToArray(function () {
+    assertIsArrayOfNumbers(seedToArray(function() {
     }));
   });
 });
