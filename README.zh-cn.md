@@ -55,18 +55,18 @@ Node.js
 
 生成 [0, 255] 之间的整数:
 
-   rng.byte();
+    rng.byte();
 
 生成一组随机字节:
 
-   rng.bytes(length);
-   // 或者
-   const arr = new Array(length);
-   rng.bytes(arr);
+    rng.bytes(length);
+    // 或者
+    const arr = new Array(length);
+    rng.bytes(arr);
 
 洗牌:
 
-   rng.shuffle(array);
+    rng.shuffle(array);
 
 跳过指定数量的值:
 

@@ -59,18 +59,18 @@ To generate an integer value in [min, max):
 
 To generate an integer value in [0, 255]:
 
-   rng.byte();
+    rng.byte();
 
 To generate an array of bytes:
 
-   rng.bytes(length);
-   // or
-   const arr = new Array(length);
-   rng.bytes(arr);
+    rng.bytes(length);
+    // or
+    const arr = new Array(length);
+    rng.bytes(arr);
 
 To shuffle an array:
 
-   rng.shuffle(array);
+    rng.shuffle(array);
 
 To discard certain number of results:
 
