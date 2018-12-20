@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/nillith/xorshift256.svg?branch=master)](https://travis-ci.org/nillith/xorshift256)
-[![Coverage Status](https://coveralls.io/repos/github/nillith/xorshift256/badge.svg?branch=master)](https://coveralls.io/github/nillith/xorshift256?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/nillith/xorshift256/badge.svg?branch=master&service=github)](https://coveralls.io/github/nillith/xorshift256?branch=master)
 [![npm version](https://badge.fury.io/js/xorshift256.svg)](https://badge.fury.io/js/xorshift256)
 
 # XorShift256
