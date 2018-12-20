@@ -1,4 +1,4 @@
-import {discard, ReciprocalInt32, ReciprocalUint32, SeedType, toInt32} from "./helpers";
+import {$floor, $discard, ReciprocalInt32, ReciprocalUint32, SeedType, toInt32, $assign, $Array} from "./helpers";
 
 export interface RandomEngine {
   seed(seed?: SeedType): void;
@@ -54,8 +54,8 @@ const normalizeMinMax = function(min: number, max?: number): [number, number] {
 
 const getIntSpanMin = function(min: number, max?: number): [number, number] {
   [min, max] = normalizeMinMax(min, max);
-  min = Math.floor(min);
-  const span = Math.floor(max - min);
+  min = $floor(min);
+  const span = $floor(max - min);
   return [span, min];
 };
 
@@ -77,7 +77,7 @@ const RNGMixIn = {
   uniformInt(this: RandomNumberGenerator, min: number, max?: number): number {
     let span: number;
     [span, min] = getIntSpanMin(min, max);
-    return Math.floor(this.uniform01() * span) + min;
+    return $floor(this.uniform01() * span) + min;
   },
 
   uniform(this: RandomNumberGenerator, min: number, max?: number): number {
@@ -91,7 +91,7 @@ const RNGMixIn = {
     let span: number;
     [span, min] = getIntSpanMin(min, max);
     return function() {
-      return Math.floor(self.uniform01() * span) + min;
+      return $floor(self.uniform01() * span) + min;
     };
   },
 
@@ -105,16 +105,16 @@ const RNGMixIn = {
   },
 
   byte(this: RandomNumberGenerator): number {
-    return Math.floor(this.uniform01() * 256);
+    return $floor(this.uniform01() * 256);
   },
 
   bytes(this: RandomNumberGenerator, arg: number | number[] | Uint8Array): number[] | Uint8Array | null {
     if (typeof arg === 'number') {
-      arg = Math.floor(arg);
+      arg = $floor(arg);
       if (arg <= 0) {
         return null;
       }
-      arg = new Array(arg);
+      arg = new $Array(arg);
     }
 
     if (null == arg) {
@@ -136,7 +136,7 @@ const RNGMixIn = {
       let tmp: any;
       let j: number;
       for (let i = arr.length - 1; i > 0; --i) {
-        j = Math.floor(this.uniform01() * i);
+        j = $floor(this.uniform01() * i);
         tmp = arr[i];
         arr[i] = arr[j];
         arr[j] = tmp;
@@ -157,11 +157,11 @@ export const engineToRNG = function(rngEngine: RandomEngine, Constructor: Functi
   (result as any).__proto__ = Constructor.prototype;
 
   const namedMethods = {
-    seed(seed?: SeedType) {
-      rngEngine.seed(seed);
+    seed($seed?: SeedType) {
+      rngEngine.seed($seed);
     },
     discard(count: number) {
-      discard(rngEngine, count);
+      $discard(rngEngine, count);
     },
     clone() {
       return engineToRNG(rngEngine.clone(), Constructor);
@@ -180,7 +180,7 @@ export const engineToRNG = function(rngEngine: RandomEngine, Constructor: Functi
     },
   };
 
-  return Object.assign(result, namedMethods, RNGMixIn);
+  return $assign(result, namedMethods, RNGMixIn);
 };
 
 type EngineClass<T extends RandomEngine> = { new(): T; readonly defaultSeed: SeedType };
@@ -193,9 +193,9 @@ export type RandomNumberGeneratorClass<T extends RandomNumberGenerator> = {
 };
 
 export const createRandomNumberGeneratorClass = function <T extends RandomEngine>(Engine: EngineClass<T>, toStringTag: string): RandomNumberGeneratorClass<RandomNumberGenerator> {
-  const RNGClass: any = emptyName(function(seed: SeedType): RandomNumberGenerator {
+  const RNGClass: any = emptyName(function($seed: SeedType): RandomNumberGenerator {
     const engine = new Engine();
-    engine.seed(seed);
+    engine.seed($seed);
     return engineToRNG(engine, RNGClass);
   });
 
@@ -216,5 +216,5 @@ export const createRandomNumberGeneratorClass = function <T extends RandomEngine
     createRNGClass: createRandomNumberGeneratorClass,
   };
 
-  return Object.assign(RNGClass, namedMethods) as RandomNumberGeneratorClass<RandomNumberGenerator>;
+  return $assign(RNGClass, namedMethods) as RandomNumberGeneratorClass<RandomNumberGenerator>;
 };

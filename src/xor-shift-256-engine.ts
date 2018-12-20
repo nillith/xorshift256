@@ -1,4 +1,4 @@
-import {discard, Phi32, seedToArray, SeedType, toUint32} from "./helpers";
+import {$parseFloat, $discard, Phi32, seedToArray, SeedType, toUint32, $Array, $isFinite} from "./helpers";
 import {RandomEngine} from "./random-number-generator";
 
 const Mask = 0x7;
@@ -27,7 +27,7 @@ const createStates = function(): StateType {
   try {
     return new Uint32Array(R);
   } catch (e) {
-    return new Array(R);
+    return new $Array(R);
   }
 };
 const isValidIndex = function(index: number): boolean {
@@ -42,7 +42,7 @@ const isValidRNGStates = function(currentIndex: number, states: StateType): bool
   let x;
   for (let i = 0; i < R; ++i) {
     x = states[i];
-    if (x && isFinite(x)) {
+    if (x && $isFinite(x)) {
       return true;
     }
   }
@@ -88,9 +88,9 @@ export class XorShift256Engine implements RandomEngine {
     return toUint32(self.states[currentIndex]);
   }
 
-  seed(seed?: SeedType): void {
+  seed($seed?: SeedType): void {
     const self = this;
-    const seedArray = seedToArray(seed, (self.constructor as typeof XorShift256Engine).defaultSeed);
+    const seedArray = seedToArray($seed, (self.constructor as typeof XorShift256Engine).defaultSeed);
 
     self.currentIndex = 0;
     const {states} = self;
@@ -109,7 +109,7 @@ export class XorShift256Engine implements RandomEngine {
           states[j] = toUint32((i * R + j + 1) * Phi32);
         }
       }
-      discard(self, SeedingDiscardCount + i);
+      $discard(self, SeedingDiscardCount + i);
     }
     self.currentIndex = 0;
   }
@@ -128,10 +128,9 @@ export class XorShift256Engine implements RandomEngine {
     if (!str) {
       return false;
     }
-    str = str.toString();
     const self = this;
-    const arr = str.split(new RegExp(`\\s*${SerializeDelimiter}\\s*`)).map((e) => {
-      return toUint32(parseFloat(e));
+    const arr = str.toString().split(new RegExp(`\\s*${SerializeDelimiter}\\s*`)).map((e) => {
+      return toUint32($parseFloat(e));
     });
     const [inputIndex, ...inputStates] = arr;
     if (isValidRNGStates(inputIndex, inputStates)) {
