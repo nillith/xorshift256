@@ -515,4 +515,13 @@ describe('XorShift256', () => {
       assertState(rng, seedState.steps, seedState.states);
     }
   });
+
+  it('should return uuid v4', () => {
+    const rng = XorShift256();
+    let i = 1000;
+    const reg = /^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$/;
+    while (i--) {
+      assert.isTrue(reg.test(rng.uuid4()));
+    }
+  });
 });

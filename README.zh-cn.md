@@ -27,7 +27,7 @@ Node.js
     // 或者
     rng.uniform01();
 
-生成 (-1, 1) 之间的浮点数:
+生成 [-1, 1) 之间的浮点数:
 
     rng.uniform11();
 
@@ -63,6 +63,10 @@ Node.js
     // 或者
     const arr = new Array(length);
     rng.bytes(arr);
+
+生成 uuid v4 :
+
+    rng.uuid4();
 
 洗牌:
 

@@ -1,4 +1,14 @@
-import {$floor, $discard, ReciprocalInt32, ReciprocalUint32, SeedType, toInt32, $assign, $Array} from "./helpers";
+import {
+  $Array,
+  $assign,
+  $discard,
+  $floor,
+  ReciprocalInt32,
+  ReciprocalUint32,
+  SeedType,
+  toInt32,
+  toUint32,
+} from "./helpers";
 
 export interface RandomEngine {
   seed(seed?: SeedType): void;
@@ -42,6 +52,8 @@ export interface RandomNumberGenerator extends RandomEngine {
   bytes(arg: number | number[] | Uint8Array): number[] | Uint8Array | null;
 
   shuffle(arr?: any[]): void;
+
+  uuid4(): string;
 }
 
 const normalizeMinMax = function(min: number, max?: number): [number, number] {
@@ -62,6 +74,11 @@ const getIntSpanMin = function(min: number, max?: number): [number, number] {
 const getRealSpanMin = function(min: number, max?: number): [number, number] {
   [min, max] = normalizeMinMax(min, max);
   return [max - min, min];
+};
+
+const paddings = '00000000';
+const toPaddedHex = function(n: number): string {
+  return (paddings + n.toString(16)).substr(-8);
 };
 
 const RNGMixIn = {
@@ -142,6 +159,11 @@ const RNGMixIn = {
         arr[j] = tmp;
       }
     }
+  },
+  uuid4(this: RandomNumberGenerator): string {
+    const self = this;
+    const str = toPaddedHex(self.uint32()) + toPaddedHex(toUint32((self.uint32() & 0xffff0fff) | 0x4000)) + toPaddedHex(self.uint32()) + toPaddedHex(self.uint32());
+    return str.substr(0, 8) + '-' + str.substr(8, 4) + '-' + str.substr(12, 4) + '-' + str.substr(16, 4) + '-' + str.substring(20);
   },
 };
 

@@ -31,7 +31,7 @@ To generate a floating point value in [0, 1):
     // or:
     rng.uniform01();
 
-To generate a floating point value in (-1, 1):
+To generate a floating point value in [-1, 1):
 
     rng.uniform11();
 
@@ -67,6 +67,10 @@ To generate an array of bytes:
     // or
     const arr = new Array(length);
     rng.bytes(arr);
+
+To generate uuid v4 (this RNG can generate all possible combination of 256 bits, excluding all zero, so it's safe to be used to generate uuid v4):
+
+    rng.uuid4();
 
 To shuffle an array:
 

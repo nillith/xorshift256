@@ -21,7 +21,7 @@ const createOutput = function (file, extra) {
 const terserReserved = ['XorShift256', 'createRNGClass', 'exports',
   'seed', 'uint32', 'discard', 'serialize', 'deserialize', 'clone',
   'uniformInt', 'uniform', 'uniformIntGenerator', 'uniformGenerator',
-  'uniform01', 'int32', 'uniform11', 'equals', 'byte', 'bytes', 'shuffle', 'defaultSeed', 'step']
+  'uniform01', 'int32', 'uniform11', 'equals', 'byte', 'bytes', 'shuffle', 'defaultSeed', 'step', 'uuid4']
 const createConfig = function (output) {
   return {
     input: 'src/index.ts',
