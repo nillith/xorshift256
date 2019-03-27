@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/xorshift256.svg)](https://badge.fury.io/js/xorshift256)
 
 # XorShift256
-A tiny standalone library that provide a seedable random number generator with a period of 2^256 in JavaScript.
+A tiny standalone seedable random number generator that has a period of 2^256 - 1.
 
 *Read this in other languages: [English](README.md), [简体中文](README.zh-cn.md).*
 
@@ -19,23 +19,23 @@ Node.js
 
     const rng = XorShift256(Math.random());
 
-The parameter of the constructor will be used to seed the generator. It's optional. If you don't provide one. It will seed with a fixed default seed:  `XorShift256.defaultSeed`. You can pass anything as seed. It's recommended to pass an array of numbers.
+The constructor accepts one optional seed parameter. If you don't provide one. It will be seeded with a fixed default seed:  `XorShift256.defaultSeed`. You can pass anything as seed. It's recommended that you pass an array of numbers.
 
 You can also reseed the generator anytime after creation:
 
     rng.seed(some-seed);
 
-To generate a floating point value in [0, 1):
+To generate a floating point value in the interval [0, 1):
 
     rng();
     // or:
     rng.uniform01();
 
-To generate a floating point value in [-1, 1):
+To generate a floating point value in the interval [-1, 1):
 
     rng.uniform11();
 
-To generate a floating point value in [min, max):
+To generate a floating point value in the interval [min, max):
 
     rng.uniform(min, max);
     // or:
@@ -50,14 +50,14 @@ To generate a 32bit integer:
 
     rng.int32();
 
-To generate an integer value in [min, max):
+To generate an integer value in the interval [min, max):
 
     rng.uniformInt(min, max);
     // or:
     const generate = rng.uniformIntGenerator(min, max);
     generate();
 
-To generate an integer value in [0, 255]:
+To generate an integer value in the interval [0, 255]:
 
     rng.byte();
 
@@ -68,7 +68,7 @@ To generate an array of bytes:
     const arr = new Array(length);
     rng.bytes(arr);
 
-To generate uuid v4 (this RNG can generate all possible combination of 256 bits, excluding all zero, so it's safe to be used to generate uuid v4):
+To generate uuid v4 (this RNG can generate all possible combinations of 256 bits, excluding all zero, so it's safe to be used to generate uuid v4):
 
     rng.uuid4();
 
