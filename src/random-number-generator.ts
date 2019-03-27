@@ -98,7 +98,7 @@ const RNGMixIn = {
     return toInt32(this.uint32());
   },
   uniform01(this: RandomNumberGenerator): number {
-    return this.uint32() * ReciprocalUint32;
+    return this();
   },
   uniform11(this: RandomNumberGenerator): number {
     return this.int32() * ReciprocalInt32;
@@ -106,13 +106,13 @@ const RNGMixIn = {
   uniformInt(this: RandomNumberGenerator, min: number, max?: number): number {
     let span: number;
     [span, min] = getIntSpanMin(min, max);
-    return $floor(this.uniform01() * span) + min;
+    return $floor(this() * span) + min;
   },
 
   uniform(this: RandomNumberGenerator, min: number, max?: number): number {
     let span: number;
     [span, min] = getRealSpanMin(min, max);
-    return this.uniform01() * span + min;
+    return this() * span + min;
   },
 
   uniformIntGenerator(this: RandomNumberGenerator, min: number, max?: number): NumberGenerator {
@@ -120,7 +120,7 @@ const RNGMixIn = {
     let span: number;
     [span, min] = getIntSpanMin(min, max);
     return function() {
-      return $floor(self.uniform01() * span) + min;
+      return $floor(self() * span) + min;
     };
   },
 
@@ -129,12 +129,12 @@ const RNGMixIn = {
     let span: number;
     [span, min] = getRealSpanMin(min, max);
     return function() {
-      return self.uniform01() * span + min;
+      return self() * span + min;
     };
   },
 
   byte(this: RandomNumberGenerator): number {
-    return $floor(this.uniform01() * 256);
+    return $floor(this() * 256);
   },
 
   bytes(this: RandomNumberGenerator, arg: number | number[] | Uint8Array): number[] | Uint8Array | null {
@@ -165,7 +165,7 @@ const RNGMixIn = {
       let tmp: any;
       let j: number;
       for (let i = arr.length - 1; i > 0; --i) {
-        j = $floor(this.uniform01() * i);
+        j = $floor(this() * i);
         tmp = arr[i];
         arr[i] = arr[j];
         arr[j] = tmp;
@@ -185,7 +185,7 @@ const emptyName = function(anonymousFunction: Function): Function {
 
 export const engineToRNG = function(rngEngine: RandomEngine, Constructor: Function): RandomNumberGenerator {
   const result: RandomNumberGenerator = emptyName(function() {
-    return result.uniform01();
+    return result.uint32() * ReciprocalUint32;
   }) as RandomNumberGenerator;
 
   (result as any).__proto__ = Constructor.prototype;

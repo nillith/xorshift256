@@ -1,6 +1,6 @@
 {
   "name": "xorshift256",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "main": "dist/cjs.js",
   "module": "dist/es.js",
   "browser": "dist/iife.js",
