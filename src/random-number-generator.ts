@@ -11,6 +11,24 @@ import {
 } from "./helpers";
 
 export interface RandomEngine {
+  $seed(seed?: SeedType): void;
+
+  $uint32(): number;
+
+  $step(): void;
+
+  $serialize(): string;
+
+  $deserialize(str: string): boolean;
+
+  $clone(): this;
+}
+
+export type NumberGenerator = () => number;
+
+export interface RandomNumberGenerator {
+  (): number;
+
   seed(seed?: SeedType): void;
 
   uint32(): number;
@@ -22,12 +40,6 @@ export interface RandomEngine {
   deserialize(str: string): boolean;
 
   clone(): this;
-}
-
-export type NumberGenerator = () => number;
-
-export interface RandomNumberGenerator extends RandomEngine {
-  (): number;
 
   uniform01(): number;
 
@@ -180,22 +192,22 @@ export const engineToRNG = function(rngEngine: RandomEngine, Constructor: Functi
 
   const namedMethods = {
     seed($seed?: SeedType) {
-      rngEngine.seed($seed);
+      rngEngine.$seed($seed);
     },
     discard(count: number) {
       $discard(rngEngine, count);
     },
     clone() {
-      return engineToRNG(rngEngine.clone(), Constructor);
+      return engineToRNG(rngEngine.$clone(), Constructor);
     },
     serialize() {
-      return rngEngine.serialize();
+      return rngEngine.$serialize();
     },
     deserialize(str: string): boolean {
-      return rngEngine.deserialize(str);
+      return rngEngine.$deserialize(str);
     },
     uint32() {
-      return rngEngine.uint32();
+      return rngEngine.$uint32();
     },
     equals(rhs: RandomNumberGenerator): boolean {
       return null !== rhs && this.serialize() === rhs.serialize();
@@ -205,19 +217,19 @@ export const engineToRNG = function(rngEngine: RandomEngine, Constructor: Functi
   return $assign(result, namedMethods, RNGMixIn);
 };
 
-type EngineClass<T extends RandomEngine> = { new(): T; readonly defaultSeed: SeedType };
+type EngineClass<T extends RandomEngine> = { new(): T; readonly $defaultSeed: SeedType };
 
 export type RandomNumberGeneratorClass<T extends RandomNumberGenerator> = {
   new(seed?: SeedType): T;
+  (seed?: SeedType): T;
   deserialize(str: string): T | null;
   readonly defaultSeed: SeedType;
-  (seed?: SeedType): T;
 };
 
 export const createRandomNumberGeneratorClass = function <T extends RandomEngine>(Engine: EngineClass<T>, toStringTag: string): RandomNumberGeneratorClass<RandomNumberGenerator> {
   const RNGClass: any = emptyName(function($seed: SeedType): RandomNumberGenerator {
     const engine = new Engine();
-    engine.seed($seed);
+    engine.$seed($seed);
     return engineToRNG(engine, RNGClass);
   });
 
@@ -225,17 +237,16 @@ export const createRandomNumberGeneratorClass = function <T extends RandomEngine
 
   RNGPrototype[Symbol.toStringTag] = toStringTag;
 
-  RNGClass.defaultSeed = Engine.defaultSeed;
+  RNGClass.defaultSeed = Engine.$defaultSeed;
 
   const namedMethods = {
     deserialize(str: string): RandomNumberGenerator | null {
       const engine = new Engine();
-      if (engine.deserialize(str)) {
+      if (engine.$deserialize(str)) {
         return engineToRNG(engine, RNGClass);
       }
       return null;
     },
-    createRNGClass: createRandomNumberGeneratorClass,
   };
 
   return $assign(RNGClass, namedMethods) as RandomNumberGeneratorClass<RandomNumberGenerator>;

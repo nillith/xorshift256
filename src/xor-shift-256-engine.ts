@@ -52,11 +52,11 @@ const isValidRNGStates = function(currentIndex: number, states: StateType): bool
 const SerializeDelimiter: string = ',';
 
 export class XorShift256Engine implements RandomEngine {
-  static readonly defaultSeed: SeedType = [97777];
+  static readonly $defaultSeed: SeedType = [97777];
   private states = createStates();
   private currentIndex: number = 0;
 
-  step() {
+  $step() {
     const self = this;
     const {currentIndex, states} = self;
 
@@ -69,7 +69,7 @@ export class XorShift256Engine implements RandomEngine {
     self.currentIndex = advanceIndex(currentIndex, 1);
   }
 
-  clone(): this {
+  $clone(): this {
     const self = this;
     const result = new XorShift256Engine();
     const resultStates = result.states;
@@ -81,16 +81,16 @@ export class XorShift256Engine implements RandomEngine {
     return result as this;
   }
 
-  uint32(): number {
+  $uint32(): number {
     const self = this;
     const {currentIndex} = self;
-    self.step();
+    self.$step();
     return toUint32(self.states[currentIndex]);
   }
 
-  seed($seed?: SeedType): void {
+  $seed($seed?: SeedType): void {
     const self = this;
-    const seedArray = seedToArray($seed, (self.constructor as typeof XorShift256Engine).defaultSeed);
+    const seedArray = seedToArray($seed, (self.constructor as typeof XorShift256Engine).$defaultSeed);
 
     self.currentIndex = 0;
     const {states} = self;
@@ -114,7 +114,7 @@ export class XorShift256Engine implements RandomEngine {
     self.currentIndex = 0;
   }
 
-  serialize(): string {
+  $serialize(): string {
     const self = this;
     const result = [self.currentIndex];
     const {states} = self;
@@ -124,7 +124,7 @@ export class XorShift256Engine implements RandomEngine {
     return result.join(SerializeDelimiter);
   }
 
-  deserialize(str: string): boolean {
+  $deserialize(str: string): boolean {
     if (!str) {
       return false;
     }

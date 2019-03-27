@@ -9,7 +9,7 @@ export const toInt32 = function(n: number): number {
 export const $discard = function(target: any, count: number) {
   count = toUint32(count);
   while (count-- > 0) {
-    target.step();
+    target.$step();
   }
 };
 

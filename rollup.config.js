@@ -18,7 +18,7 @@ const createOutput = function (file, extra) {
 
 // workaround for terser
 
-const terserReserved = ['XorShift256', 'createRNGClass', 'exports',
+const terserReserved = ['XorShift256', 'exports',
   'seed', 'uint32', 'discard', 'serialize', 'deserialize', 'clone',
   'uniformInt', 'uniform', 'uniformIntGenerator', 'uniformGenerator',
   'uniform01', 'int32', 'uniform11', 'equals', 'byte', 'bytes', 'shuffle', 'defaultSeed', 'step', 'uuid4']
